@@ -1,0 +1,29 @@
+<%- include("partials/header") %>
+<%- include("partials/navbar") %>
+<div class="container">
+    <h1 style="text-align: center;">Submit a model</h1>
+    <div class="row">
+      <form method="POST" action="/posts" style="margin: 0 auto;">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            aria-describedby="title"
+            name="title"
+          />
+          <label for="description">description</label>
+          <input
+            type="text"
+            class="form-control"
+            id="description"
+            aria-describedby="description"
+            name="description"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+<%- include("partials/footer") %>

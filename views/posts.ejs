@@ -2,16 +2,20 @@
 <%- include("partials/navbar") %>
 
 <div class="container">
-  <% posts.forEach((item) => { %>
-  <div class="card" style="width: 18rem;">
-    <img src="https://picsum.photos/200" class="card-img-top" alt="..." />
-    <div class="card-body">
-      <h5 class="card-title"><%= item.title %></h5>
-      <p class="card-text"><%= item.description %></p>
-      <small class="text-muted"><%= item.author %></small>
-      <a href="#" class="btn btn-primary">Open model</a>
+  <div class="row" style="display: flex; flex-wrap: wrap;">
+    <% posts.forEach((item) => { %>
+    <div class="col-4 mb-5">
+      <div class="card" style="width: 18rem;">
+        <img src="https://picsum.photos/200" class="card-img-top" alt="..." />
+        <div class="card-body">
+          <h5 class="card-title"><%= item.title %></h5>
+          <p class="card-text"><%= item.description %></p>
+          <small class="text-muted"><%= item.author %></small>
+          <a href="#" class="btn btn-primary">Open model</a>
+        </div>
+      </div>
     </div>
-  </div>
-  <% }) %>
+    <% }); %>
+</div>
 </div>
 <%- include("partials/footer") %>

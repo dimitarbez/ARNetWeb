@@ -47,6 +47,7 @@ app.post("/new", (req, res) => {
         else 
         {
             console.log("Successful registering");
+            res.render("login");
         }
     });
 
@@ -64,15 +65,25 @@ app.get("/posts", (req, res) => {
     });
 });
 
-app.get("/posts/new", (err, res) => {
-
+app.get("/posts/new", (req, res) => {
+    res.render("newpost");
 });
 
-app.post("/posts", (err, res) => {
-
+app.post("/posts", (req, res) => {
+    Post.create({
+        title: req.body.title,
+        description: req.body.description
+    }, (err, post) =>{
+        if(err)
+        {
+            console.log("Error posting");
+        }
+        else
+        {
+            res.redirect("/posts");
+        }
+    });
 });
-
-
 
 app.get("/u/:user", (req, res) => {
     let user = req.params.user;
