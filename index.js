@@ -2,12 +2,14 @@ let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
 let mongoose = require('mongoose');
+let methodOverride = require('method-override');
 
 // CONFIG
 
 mongoose.connect("mongodb://localhost:27017/augmentx");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 
 // MODELS
@@ -99,6 +101,33 @@ app.get("/posts/:id", (req, res) => {
     })
 });
 
+// EDIT ROUTE
+app.get("/posts/:id/edit", (req, res) => {
+    Post.findById(req.params.id, (err, foundPost) => {
+        if(err)
+        {
+            res.redirect("/posts" + req.param.id);
+        }
+        else
+        {
+            res.render("posts_edit", {post: foundPost});
+        }
+    });
+});
+
+//UPDATE ROUTE
+app.put("/posts/:id", (req, res) => {
+    Post.findByIdAndUpdate(req.params.id, req.body.post, (err, updatedBlog) => {
+        if(err)
+        {
+            res.redirect("/");
+        }
+        else
+        {
+            res.redirect("/posts/" + req.params.id);
+        }
+    });
+});
 
 app.get("/u/:user", (req, res) => {
     let user = req.params.user;
