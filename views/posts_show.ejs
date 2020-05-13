@@ -1,0 +1,11 @@
+<%- include("partials/header") %>
+<%- include("partials/navbar") %>
+
+<div class="container">
+    <h1><%= post.title %></h1>
+    <h6><%= post.author %></h6>
+    <h6><%= post.created.toLocaleString(); %></h6>
+    <p><%= post.description %></p>
+</div>
+
+<%- include("partials/footer") %>

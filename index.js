@@ -2,12 +2,15 @@ let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
 let mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/augmentx");
 
+// CONFIG
+
+mongoose.connect("mongodb://localhost:27017/augmentx");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
+// MODELS
 
 let userSchema = new mongoose.Schema({
     username: String,
@@ -18,12 +21,14 @@ let userSchema = new mongoose.Schema({
 let postSchema = new mongoose.Schema({
     author: String,
     title: String,
-    description: String
+    description: String,
+    created: {type: Date, default: Date.now}
 });
 
 let User = mongoose.model("User", userSchema);
-
 let Post = mongoose.model("Post", postSchema);
+
+// ROUTES
 
 app.get("/", (req, res) => {
     res.render("login");
@@ -70,10 +75,7 @@ app.get("/posts/new", (req, res) => {
 });
 
 app.post("/posts", (req, res) => {
-    Post.create({
-        title: req.body.title,
-        description: req.body.description
-    }, (err, post) =>{
+    Post.create(req.body.post, (err, post) =>{
         if(err)
         {
             console.log("Error posting");
@@ -84,6 +86,19 @@ app.post("/posts", (req, res) => {
         }
     });
 });
+
+// SHOW ROUTE
+app.get("/posts/:id", (req, res) => {
+    Post.findById(req.params.id, (err, foundPost) => {
+        if(err){
+            res.redirect("/posts");
+        }
+        else{
+            res.render("posts_show", {post: foundPost})
+        }
+    })
+});
+
 
 app.get("/u/:user", (req, res) => {
     let user = req.params.user;
