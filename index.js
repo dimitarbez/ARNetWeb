@@ -3,6 +3,9 @@ let app = express();
 let bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 let methodOverride = require('method-override');
+// Firebase App (the core Firebase SDK) is always required and
+// must be listed before other Firebase SDKs
+let firebase = require("firebase/app");
 
 // CONFIG
 
@@ -11,6 +14,26 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
+
+// Add the Firebase products that you want to use
+require("firebase/auth");
+require("firebase/firestore");
+
+// TODO: Replace the following with your app's Firebase project configuration
+var firebaseConfig = {
+    apiKey: "AIzaSyD5RZorSvd0Vqho3zr68BbR4ywUrg_z2mM",
+    authDomain: "eduar-5dcad.firebaseapp.com",
+    databaseURL: "https://eduar-5dcad.firebaseio.com",
+    projectId: "eduar-5dcad",
+    storageBucket: "eduar-5dcad.appspot.com",
+    messagingSenderId: "213508622109",
+    appId: "1:213508622109:web:70f5d81eab60b7098d03f4",
+    measurementId: "G-X22HCJ8CNL"
+};
+  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  
 
 // MODELS
 
@@ -127,6 +150,22 @@ app.put("/posts/:id", (req, res) => {
             res.redirect("/posts/" + req.params.id);
         }
     });
+});
+
+// DELETE ROUTE
+app.delete("/posts/:id", (req, res) => {
+    // Destroy block
+    Post.findByIdAndRemove(req.params.id, (err) =>{
+        if(err)
+        {
+            res.redirect('/posts');
+        }
+        else
+        {
+            res.redirect('/posts');
+        }
+    });
+    // Redirect somewhere
 });
 
 app.get("/u/:user", (req, res) => {

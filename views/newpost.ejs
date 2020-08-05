@@ -25,5 +25,39 @@
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
+    <div>
+      <progress value="0" max="100" id="uploader">0%</progress>
+      <input type="file" value="upload" id="fileButton"/>
+    </div>
   </div>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-storage.js"></script>
+  <script>
+    // TODO: Replace the following with your app's Firebase project configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5RZorSvd0Vqho3zr68BbR4ywUrg_z2mM",
+      authDomain: "eduar-5dcad.firebaseapp.com",
+      databaseURL: "https://eduar-5dcad.firebaseio.com",
+      projectId: "eduar-5dcad",
+      storageBucket: "eduar-5dcad.appspot.com",
+      messagingSenderId: "213508622109",
+      appId: "1:213508622109:web:70f5d81eab60b7098d03f4",
+      measurementId: "G-X22HCJ8CNL"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    let uploader = document.querySelector('#upload');
+    let fileButton = document.querySelector("#fileButton");
+
+    fileButton.addEventListener('change', (e) => {
+      // get file
+      let file = e.target.files[0];
+      // create storage ref
+      firebase.storage().ref('folder_name/file_name');
+      // upload file
+      // update progress bar
+    });
+
+  </script>
 <%- include("partials/footer") %>
