@@ -3,37 +3,30 @@ let app = express();
 let bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 let methodOverride = require('method-override');
-// Firebase App (the core Firebase SDK) is always required and
-// must be listed before other Firebase SDKs
-let firebase = require("firebase/app");
+const multer = require('multer');
+const { Storage } = require('@google-cloud/storage');
 
 // CONFIG
+const uploader = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 25 * 1024 * 1024
+    }
+});
+
+const storage = new Storage({
+    projectId: 'eduar-5dcad',
+    keyFilename: 'api/services/key.json',
+});
+
+const bucket = storage.bucket('gs://eduar-5dcad.appspot.com');
 
 mongoose.connect("mongodb://localhost:27017/augmentx");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
-
-// Add the Firebase products that you want to use
-require("firebase/auth");
-require("firebase/firestore");
-
-// TODO: Replace the following with your app's Firebase project configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyD5RZorSvd0Vqho3zr68BbR4ywUrg_z2mM",
-    authDomain: "eduar-5dcad.firebaseapp.com",
-    databaseURL: "https://eduar-5dcad.firebaseio.com",
-    projectId: "eduar-5dcad",
-    storageBucket: "eduar-5dcad.appspot.com",
-    messagingSenderId: "213508622109",
-    appId: "1:213508622109:web:70f5d81eab60b7098d03f4",
-    measurementId: "G-X22HCJ8CNL"
-};
-  
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  
 
 // MODELS
 
@@ -99,17 +92,59 @@ app.get("/posts/new", (req, res) => {
     res.render("newpost");
 });
 
-app.post("/posts", (req, res) => {
-    Post.create(req.body.post, (err, post) =>{
-        if(err)
-        {
-            console.log("Error posting");
+app.post("/posts", uploader.single('file_to_upload'), async (req, res, next) => {
+    try{
+        if(!req.file){
+            res.status(400).send('No file uploaded');
+            return;
         }
-        else
-        {
-            res.redirect("/posts");
-        }
-    });
+        console.log(req.file);
+        const blob = bucket.file(req.file.originalname);
+        const blobStream = blob.createWriteStream({
+            metadata: {
+                contentType: req.file.mimetype
+            }
+        });
+
+        blobStream.on('error', err => {
+            next(err);
+        });
+
+        blobStream.on('finish', () => {
+        
+                // Assemble the file public URL
+            const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(blob.name)}?alt=media`;
+            // Return the file name and its public URL
+            // for you to store in your own database
+            res.status(200).send({ 
+                fileName: req.file.originalname,
+                fileLocation: publicUrl
+            });
+
+            console.log('finished');
+
+        });
+
+        blobStream.end(req.file.buffer);
+
+        Post.create(req.body.post, (err, post) =>{
+            if(err)
+            {
+                console.log("Error posting");
+            }
+            else
+            {
+                res.redirect("/posts");
+            }
+        });
+    }
+    catch(error) {
+        res.status(200).send(
+            `Error, could not upload file: ${error}`
+        );
+        return;
+    }
+
 });
 
 // SHOW ROUTE
