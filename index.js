@@ -3,8 +3,10 @@ let app = express();
 let bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 let methodOverride = require('method-override');
+let expressSanitizer = require('express-sanitizer');
 const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
+let Post = require("./models/post.js");
 
 // CONFIG
 const uploader = multer({
@@ -27,24 +29,24 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
+// express sanitizer must be after body parser
+app.use(expressSanitizer());
 
 // MODELS
 
 let userSchema = new mongoose.Schema({
     username: String,
     email: String,
-    password: String
+    password: String,
+    posts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Post"
+        }
+    ]
 })
 
-let postSchema = new mongoose.Schema({
-    author: String,
-    title: String,
-    description: String,
-    created: {type: Date, default: Date.now}
-});
-
 let User = mongoose.model("User", userSchema);
-let Post = mongoose.model("Post", postSchema);
 
 // ROUTES
 
@@ -92,6 +94,7 @@ app.get("/posts/new", (req, res) => {
     res.render("newpost");
 });
 
+// create route
 app.post("/posts", uploader.single('file_to_upload'), async (req, res, next) => {
     try{
         if(!req.file){
@@ -127,6 +130,7 @@ app.post("/posts", uploader.single('file_to_upload'), async (req, res, next) => 
 
         blobStream.end(req.file.buffer);
 
+        req.body.post.description = req.sanitize(req.body.post.description);
         Post.create(req.body.post, (err, post) =>{
             if(err)
             {
@@ -175,6 +179,7 @@ app.get("/posts/:id/edit", (req, res) => {
 
 //UPDATE ROUTE
 app.put("/posts/:id", (req, res) => {
+    req.body.post.description = req.sanitize(req.body.post.description);
     Post.findByIdAndUpdate(req.params.id, req.body.post, (err, updatedBlog) => {
         if(err)
         {

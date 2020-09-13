@@ -5,8 +5,9 @@
     <h1><%= post.title %></h1>
     <h6><%= post.author %></h6>
     <h6><%= post.created.toLocaleString(); %></h6>
-    <p><%= post.description %></p>
+    <p><%- post.description %></p>
 </div>
+<a href="/posts/<%= post._id %>/edit">Edit</a>
 <div>
     <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
         <button class="btn btn-danger">Delete</button>

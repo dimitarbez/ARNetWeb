@@ -15,14 +15,7 @@
             value="<%= post.title %>"
           />
           <label for="description">description</label>
-          <input
-            type="text"
-            class="form-control"
-            id="description"
-            aria-describedby="description"
-            name="post[description]"
-            value="<%= post.description %>"
-          />
+          <textarea name="post[description]" id="description" cols="30" rows="10"><%= post.description %></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
