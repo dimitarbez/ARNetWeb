@@ -7,6 +7,9 @@ let expressSanitizer = require('express-sanitizer');
 const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
 let Post = require("./models/post.js");
+let seedDB = require("./seeds.js");
+
+seedDB();
 
 // CONFIG
 const uploader = multer({
