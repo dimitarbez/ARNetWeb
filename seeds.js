@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { countDocuments, create } = require('./models/post.js');
 const Post = require('./models/post.js');
 const Comment = require('./models/comment.js');
 

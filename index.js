@@ -156,11 +156,14 @@ app.post("/posts", uploader.single('file_to_upload'), async (req, res, next) => 
 
 // SHOW ROUTE
 app.get("/posts/:id", (req, res) => {
-    Post.findById(req.params.id, (err, foundPost) => {
+    // find by id and populate comments based on the array of comnment ids
+    // post object now has the comments in it
+    Post.findById(req.params.id).populate("comments").exec( (err, foundPost) => {
         if(err){
             res.redirect("/posts");
         }
         else{
+            console.log(foundPost);
             res.render("posts_show", {post: foundPost})
         }
     })

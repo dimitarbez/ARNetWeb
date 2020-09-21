@@ -14,4 +14,10 @@
     </form>
 </div>
 
+<% post.comments.forEach( (comment) => { %>
+
+    <strong><p><%= comment.text %> </strong> - <%= comment.author %></p>
+
+<% }); %>
+
 <%- include("partials/footer") %>
