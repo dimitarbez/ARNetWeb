@@ -1,0 +1,22 @@
+<%- include("../partials/header") %> 
+<%- include("../partials/navbar") %>
+<div class="container">
+  <h1 style="text-align: center">Submit a comment to <%= post.title %></h1>
+  <div class="row">
+    <form
+      method="POST"
+      action="/posts/<%= post._id %>/comments"
+      style="margin: 0 auto"
+    >
+        <div class="form-group">
+        <label for="text">text</label>
+        <input type="text" name="comment[text]" id="text" />
+        <label for="author">author</label>
+        <input type="text" name="comment[author]" id="author" />
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+<%- include("../partials/footer") %>

@@ -1,9 +1,9 @@
-<%- include("partials/header") %>
-<%- include("partials/navbar") %>
+<%- include("../partials/header") %>
+<%- include("../partials/navbar") %>
 <div class="container">
-    <h1 style="text-align: center;">Submit a model</h1>
+    <h1 style="text-align: center;">Edit <%= post.title %></h1>
     <div class="row">
-      <form method="POST" enctype="multipart/form-data" action="/posts" style="margin: 0 auto;">
+      <form method="POST" action="/posts/<%= post._id %>?_method=PUT" style="margin: 0 auto;">
         <div class="form-group">
           <label for="title">Title</label>
           <input
@@ -12,17 +12,13 @@
             id="title"
             aria-describedby="title"
             name="post[title]"
+            value="<%= post.title %>"
           />
           <label for="description">description</label>
-          <textarea name="post[description]" class="form-control" id="description" cols="30" rows="10"></textarea>
-        </div>
-        <div>
-          <input type="file" name="file_to_upload" />
+          <textarea name="post[description]" id="description" cols="30" rows="10"><%= post.description %></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
-
   </div>
-
-<%- include("partials/footer") %>
+<%- include("../partials/footer") %>

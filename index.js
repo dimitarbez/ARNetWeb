@@ -7,6 +7,7 @@ let expressSanitizer = require('express-sanitizer');
 const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
 let Post = require("./models/post.js");
+let Comment = require("./models/comment.js");
 let seedDB = require("./seeds.js");
 
 seedDB();
@@ -88,13 +89,13 @@ app.get("/posts", (req, res) => {
             console.log("Error getting posts");
         }
         else {
-            res.render("posts", {posts: allPosts});
+            res.render("posts/posts.ejs", {posts: allPosts});
         }
     });
 });
 
 app.get("/posts/new", (req, res) => {
-    res.render("newpost");
+    res.render("posts/newpost.ejs");
 });
 
 // create route
@@ -164,7 +165,7 @@ app.get("/posts/:id", (req, res) => {
         }
         else{
             console.log(foundPost);
-            res.render("posts_show", {post: foundPost})
+            res.render("posts/posts_show", {post: foundPost})
         }
     })
 });
@@ -178,7 +179,7 @@ app.get("/posts/:id/edit", (req, res) => {
         }
         else
         {
-            res.render("posts_edit", {post: foundPost});
+            res.render("posts/posts_edit", {post: foundPost});
         }
     });
 });
@@ -212,6 +213,48 @@ app.delete("/posts/:id", (req, res) => {
         }
     });
     // Redirect somewhere
+});
+
+// ====================================
+// COMMENTS ROUTES
+// ====================================
+
+app.get("/posts/:id/comments/new", (req, res) => {
+    // find post by id
+    Post.findById(req.params.id, (err, post) => {
+        if(err) {
+            console.log("can't find post");
+        }
+        else
+        {
+            res.render("comments/new.ejs", {post: post});
+        }
+    });
+});
+
+app.post("/posts/:id/comments", (req, res) => {
+    // lookup campground using id
+    Post.findById(req.params.id, (err, post) => {
+        if(err) {
+            console.log(err);
+            res.redirect("/posts");
+        }
+        else {
+            Comment.create(req.body.comment, (err, comment) => {
+                if(err) {
+                    console.log(err);
+                } else {
+                    //console.log(comment);
+                    post.comments.push(comment);
+                    post.save();
+                    res.redirect("/posts/" + post._id);
+                }
+            });
+        }
+    });
+    // create new comment
+    // connect new comment to campground
+    // redirect to campground showpage
 });
 
 app.get("/u/:user", (req, res) => {
