@@ -250,6 +250,22 @@ app.post("/register", (req, res) => {
     });
 });
 
+// show login form
+app.get("/login", (req, res) => {
+    res.render("login.ejs");
+});
+// passport with authenticate with what we've stored in the database
+// user.authenticate is handling this for us
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/posts",
+        failureRedirect: "/login"
+    }), (req, res) => {
+})
+
+function isAuthenticated() {
+
+}
 
 app.get('*', (req, res) => {
     res.send('Wrong route');
