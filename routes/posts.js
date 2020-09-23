@@ -5,13 +5,7 @@ const { Storage } = require('@google-cloud/storage');
 let Post = require("../models/post.js");
 let Comment = require("../models/comment.js");
 let User = require("../models/user.js");
-
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
+const { auth } = require("firebase");
 
 // CONFIG
 const uploader = multer({
@@ -40,12 +34,13 @@ router.get("/posts", (req, res) => {
     });
 });
 
-router.get("/posts/new", (req, res) => {
+// show post creation form
+router.get("/posts/new", isLoggedIn, (req, res) => {
     res.render("posts/newpost.ejs");
 });
 
-// create route
-router.post("/posts", uploader.single('file_to_upload'), async (req, res, next) => {
+// create post
+router.post("/posts", isLoggedIn, uploader.single('file_to_upload'), async (req, res, next) => {
     try{
         if(!req.file){
             res.status(400).send('No file uploaded');
@@ -80,7 +75,13 @@ router.post("/posts", uploader.single('file_to_upload'), async (req, res, next) 
 
         blobStream.end(req.file.buffer);
 
+        let author = {
+            id: req.user._id,
+            username: req.user.username
+        }
+
         req.body.post.description = req.sanitize(req.body.post.description);
+        req.body.post.author = author;
         Post.create(req.body.post, (err, post) =>{
             if(err)
             {
@@ -160,5 +161,12 @@ router.delete("/posts/:id", (req, res) => {
     });
     // Redirect somewhere
 });
+
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+}
 
 module.exports = router;

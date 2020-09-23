@@ -1,7 +1,13 @@
 let mongoose = require("mongoose");
 
 let postSchema = new mongoose.Schema({
-    author: String,
+    author: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        },
+        username: String
+    },
     title: String,
     description: String,
     created: {type: Date, default: Date.now},

@@ -5,7 +5,7 @@
     <div class="thumbnail">
 
         <h1><%= post.title %></h1>
-        <h6><%= post.author %></h6>
+        <h6><%= post.author.username %></h6>
         <h6><%= post.created.toLocaleString(); %></h6>
         <p class="caption-full"><%- post.description %></p>
         <a href="/posts/<%= post._id %>/edit">Edit</a>

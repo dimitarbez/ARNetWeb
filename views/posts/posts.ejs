@@ -10,7 +10,8 @@
         <div class="card-body">
           <h5 class="card-title"><%= item.title %></h5>
           <p class="card-text"><%= item.description %></p>
-          <small class="text-muted"><%= item.author %></small>
+          <small class="text-muted"><%= item.author.username %></small>
+          <hr>
           <a href="/posts/<%= item._id %>" class="btn btn-primary">Open model</a>
         </div>
       </div>
