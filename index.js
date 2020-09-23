@@ -6,11 +6,28 @@ let methodOverride = require('method-override');
 let expressSanitizer = require('express-sanitizer');
 const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
+let seedDB = require("./seeds.js");
+let passport = require("passport");
+let LocalStrategy = require("passport-local");
 let Post = require("./models/post.js");
 let Comment = require("./models/comment.js");
-let seedDB = require("./seeds.js");
+let User = require("./models/user.js");
 
 seedDB();
+
+// PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "Zivio je drug tito megju namas!",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+//authenticate() comes from passportlocalmongoose
+passport.use(new LocalStrategy(User.authenticate()));
+// serialize functions also come from passportlocalmongoose
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // CONFIG
 const uploader = multer({
@@ -39,50 +56,7 @@ app.use(expressSanitizer());
 
 // MODELS
 
-let userSchema = new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String,
-    posts: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Post"
-        }
-    ]
-})
-
-let User = mongoose.model("User", userSchema);
-
 // ROUTES
-
-app.get("/", (req, res) => {
-    res.render("login");
-});
-
-app.get("/new", (req, res) => {
-    res.render("register");
-});
-
-app.post("/new", (req, res) => {
-
-    User.create({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-    },(err, user) => {
-        if(err)
-        {
-            console.log("Error registering");
-        }
-        else 
-        {
-            console.log("Successful registering");
-            res.render("login");
-        }
-    });
-
-    res.redirect("/");
-});
 
 app.get("/posts", (req, res) => {
     Post.find({}, (err, allPosts) => {
@@ -258,10 +232,24 @@ app.post("/posts/:id/comments", (req, res) => {
     // redirect to campground showpage
 });
 
-app.get("/u/:user", (req, res) => {
-    let user = req.params.user;
-    res.render("home", {user: user});
+// show register form
+app.get("/register", (req, res) => {
+    res.render("register.ejs");
 });
+// handle signup logic
+app.post("/register", (req, res) => {
+    let newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, (err, user) => {
+        if(err) {
+            console.log(err);
+            return res.render("register.ejs");
+        }
+        passport.authenticate("local")(req, res, () => {
+            res.redirect("/posts");
+        })
+    });
+});
+
 
 app.get('*', (req, res) => {
     res.send('Wrong route');

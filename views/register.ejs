@@ -1,8 +1,10 @@
 <%- include("partials/header") %>
+<%- include("partials/navbar") %>
+
 <div class="container">
   <h1 style="text-align: center;">Welcome to AugmentX</h1>
   <div class="row">
-    <form method="POST" action="/new" style="margin: 0 auto;">
+    <form method="POST" action="/register" style="margin: 0 auto;">
       <div class="form-group">
         <label for="username">Email address</label>
         <input
@@ -12,17 +14,6 @@
           aria-describedby="emailHelp"
           name="username"
         />
-        <label for="exampleInputEmail1">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-          name="email"
-        />
-        <small id="emailHelp" class="form-text text-muted"
-          >We'll never share your email with anyone else.</small
-        >
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
