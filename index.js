@@ -15,6 +15,8 @@ let User = require("./models/user.js");
 
 seedDB();
 
+
+
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
     secret: "Zivio je drug tito megju namas!",
@@ -28,6 +30,14 @@ passport.use(new LocalStrategy(User.authenticate()));
 // serialize functions also come from passportlocalmongoose
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use((req, res, next) => {
+    // req.user is the currently logged in user
+    // this will pass req.user to all of the routes (currentUser will be accessible anywhere)
+    res.locals.currentUser = req.user;
+    console.log(res.locals.currentUser);
+    next();
+});
 
 // CONFIG
 const uploader = multer({
@@ -194,7 +204,8 @@ app.delete("/posts/:id", (req, res) => {
 // COMMENTS ROUTES
 // ====================================
 
-app.get("/posts/:id/comments/new", (req, res) => {
+// we put isLoggedIn as middleware everywhere we need the user to be logged in
+app.get("/posts/:id/comments/new", isLoggedIn, (req, res) => {
     // find post by id
     Post.findById(req.params.id, (err, post) => {
         if(err) {
@@ -207,7 +218,7 @@ app.get("/posts/:id/comments/new", (req, res) => {
     });
 });
 
-app.post("/posts/:id/comments", (req, res) => {
+app.post("/posts/:id/comments", isLoggedIn, (req, res) => {
     // lookup campground using id
     Post.findById(req.params.id, (err, post) => {
         if(err) {
@@ -263,8 +274,18 @@ app.post("/login", passport.authenticate("local",
     }), (req, res) => {
 })
 
-function isAuthenticated() {
+// logout route
+app.get("/logout", (req, res) => {
+    // this comes from packages
+    req.logout();
+    res.redirect("/posts");
+});
 
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
 }
 
 app.get('*', (req, res) => {
