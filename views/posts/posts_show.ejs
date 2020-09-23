@@ -23,7 +23,7 @@
         <% post.comments.forEach( (comment) => { %>
             <div class="row">
                 <div class="col-md-12">
-                    <strong><%= comment.author %></strong>
+                    <strong><%= comment.author.username %></strong>
                     <p><%= comment.text %></p>
                     <span class="pull-right">10 days ago</span>
                 </div>

@@ -16,7 +16,7 @@ function isLoggedIn(req, res, next) {
     res.redirect("/login");
 }
 
-// we put isLoggedIn as middleware everywhere we need the user to be logged in
+// render comments form
 router.get("/posts/:id/comments/new", isLoggedIn, (req, res) => {
     // find post by id
     Post.findById(req.params.id, (err, post) => {
@@ -30,6 +30,7 @@ router.get("/posts/:id/comments/new", isLoggedIn, (req, res) => {
     });
 });
 
+// create comment
 router.post("/posts/:id/comments", isLoggedIn, (req, res) => {
     // lookup campground using id
     Post.findById(req.params.id, (err, post) => {
@@ -43,6 +44,11 @@ router.post("/posts/:id/comments", isLoggedIn, (req, res) => {
                     console.log(err);
                 } else {
                     //console.log(comment);
+                    // add username and id to comment
+                    comment.author.id = req.user._id;
+                    comment.author.username = req.user.username
+                    // save comment
+                    comment.save();
                     post.comments.push(comment);
                     post.save();
                     res.redirect("/posts/" + post._id);

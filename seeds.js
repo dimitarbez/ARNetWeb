@@ -26,7 +26,7 @@ function seedDB() {
         }
         console.log("removed posts");
     });
-
+/*
     // add a feq posts
     createData(5).forEach((item) => {
         Post.create(item, (err, post) =>{
@@ -53,6 +53,7 @@ function seedDB() {
             }
         })
     })
+*/
     // add a few comments
 }
 
