@@ -16,6 +16,7 @@ seedDB();
 const uploader = multer({
     storage: multer.memoryStorage(),
     limits: {
+        // file size limit in MB
         fileSize: 25 * 1024 * 1024
     }
 });
@@ -30,7 +31,7 @@ const bucket = storage.bucket('gs://eduar-5dcad.appspot.com');
 mongoose.connect("mongodb://localhost:27017/augmentx");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 // express sanitizer must be after body parser
