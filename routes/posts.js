@@ -6,6 +6,7 @@ let Post = require("../models/post.js");
 let Comment = require("../models/comment.js");
 let User = require("../models/user.js");
 const { auth } = require("firebase");
+let middleware = require("../middleware/middleware.js");
 
 // CONFIG
 const uploader = multer({
@@ -35,12 +36,12 @@ router.get("/posts", (req, res) => {
 });
 
 // show post creation form
-router.get("/posts/new", isLoggedIn, (req, res) => {
+router.get("/posts/new", middleware.isLoggedIn, (req, res) => {
     res.render("posts/newpost.ejs");
 });
 
 // create post
-router.post("/posts", isLoggedIn, uploader.single('file_to_upload'), async (req, res, next) => {
+router.post("/posts", middleware.isLoggedIn, uploader.single('file_to_upload'), async (req, res, next) => {
     try{
         if(!req.file){
             res.status(400).send('No file uploaded');
@@ -119,14 +120,14 @@ router.get("/posts/:id", (req, res) => {
 
 // EDIT ROUTE
 // middleware is called before route handler
-router.get("/posts/:id/edit", checkPostOwnership, (req, res) => {
+router.get("/posts/:id/edit", middleware.checkPostOwnership, (req, res) => {
     Post.findById(req.params.id, (err, foundPost) => {
         res.render("posts/posts_edit", {post: foundPost});
     });
 });
 
 //UPDATE ROUTE
-router.put("/posts/:id", checkPostOwnership, (req, res) => {
+router.put("/posts/:id", middleware.checkPostOwnership, (req, res) => {
     req.body.post.description = req.sanitize(req.body.post.description);
     Post.findByIdAndUpdate(req.params.id, req.body.post, (err, updatedBlog) => {
         if(err)
@@ -141,7 +142,7 @@ router.put("/posts/:id", checkPostOwnership, (req, res) => {
 });
 
 // DELETE ROUTE
-router.delete("/posts/:id", checkPostOwnership, (req, res) => {
+router.delete("/posts/:id", middleware.checkPostOwnership, (req, res) => {
     // Destroy block
     Post.findByIdAndRemove(req.params.id, (err) =>{
         if(err)
@@ -155,39 +156,5 @@ router.delete("/posts/:id", checkPostOwnership, (req, res) => {
     });
     // Redirect somewhere
 });
-
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
-
-function checkPostOwnership(req, res, next) {
-    if(req.isAuthenticated()) {
-        Post.findById(req.params.id, (err, foundPost) => {
-            if(err)
-            {
-                res.redirect("back");
-            }
-            else
-            {
-                // does user own campground
-                if(foundPost.author.id.equals(req.user._id))
-                {
-                    next();
-                }
-                else
-                {
-                    res.redirect("back");
-                }
-            }
-        });
-    }
-    else {
-        // if not, redirect user to previous page
-        res.redirect("back");
-    }
-}
 
 module.exports = router;
