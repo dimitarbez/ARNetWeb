@@ -9,13 +9,6 @@ let Post = require("../models/post.js");
 let Comment = require("../models/comment.js");
 let User = require("../models/user.js");
 
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
-
 // render comments form
 router.get("/posts/:id/comments/new", isLoggedIn, (req, res) => {
     // find post by id
@@ -60,5 +53,52 @@ router.post("/posts/:id/comments", isLoggedIn, (req, res) => {
     // connect new comment to campground
     // redirect to campground showpage
 });
+
+// COMMENTS EDIT ROUTE
+router.get("/posts/:id/comments/:comment_id/edit", (req, res) => {
+    let postId = req.params.id;
+    Comment.findById(req.params.comment_id, (err, foundComment) =>{
+        if(err) {
+            console.log(err);
+            res.redirect("back");
+        }
+        else {
+            res.render("comments/comments_edit.ejs", {post_id: postId, comment: foundComment});
+        }
+    })
+});
+
+// COMMENTS UPDATE ROUTE
+router.put("/posts/:id/comments/:comment_id", (req, res) => {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment) => {
+        if(err) {
+            console.log(err);
+            res.redirect("back");
+        }
+        else {
+            console.log(updatedComment);
+            res.redirect("/posts/" + req.params.id);
+        }
+    })
+});
+
+// COMMENTS DESTROY ROUTE
+router.delete("/posts/:id/comments/:comment_id", (req, res) => {
+    Comment.findByIdAndRemove(req.params.comment_id, (err) => {
+        if(err) {
+            console.log(err);
+            res.redirect("back");
+        } else {
+            res.redirect("/posts/" + req.params.id);
+        }
+    })
+})
+
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+}
 
 module.exports = router;

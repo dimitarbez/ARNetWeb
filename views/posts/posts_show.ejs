@@ -8,12 +8,14 @@
         <h6><%= post.author.username %></h6>
         <h6><%= post.created.toLocaleString(); %></h6>
         <p class="caption-full"><%- post.description %></p>
+        <% if(currentUser && post.author.id.equals(currentUser._id)) { %>
         <a href="/posts/<%= post._id %>/edit">Edit</a>
         <div>
             <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
                 <button class="btn btn-danger">Delete</button>
             </form>
-        </div>        
+        </div>
+        <% } %>        
     </div>
     <div class="well">    
         <div class="text-right">
@@ -26,6 +28,10 @@
                     <strong><%= comment.author.username %></strong>
                     <p><%= comment.text %></p>
                     <span class="pull-right">10 days ago</span>
+                    <a class="btn btn-xs btn-warning" href="/posts/<%= post._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                    <form action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-xs btn-danger" type="submit">Delete</button>
+                    </form>
                 </div>
             </div>
             <hr>
