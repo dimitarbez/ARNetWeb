@@ -7,6 +7,7 @@ let expressSanitizer = require('express-sanitizer');
 let seedDB = require("./seeds.js");
 let passport = require("passport");
 let LocalStrategy = require("passport-local");
+let flash = require("connect-flash");
 let Post = require("./models/post.js");
 let Comment = require("./models/comment.js");
 let User = require("./models/user.js");
@@ -18,13 +19,15 @@ let mainRoutes = require("./routes/main.js");
 //seedDB();
 
 
-
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
     secret: "Zivio je drug tito megju namas!",
     resave: false,
     saveUninitialized: false
 }));
+
+app.use(flash());
+
 app.use(passport.initialize());
 app.use(passport.session());
 //authenticate() comes from passportlocalmongoose
@@ -37,12 +40,10 @@ app.use((req, res, next) => {
     // req.user is the currently logged in user
     // this will pass req.user to all of the routes (currentUser will be accessible anywhere)
     res.locals.currentUser = req.user;
-    console.log(res.locals.currentUser);
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
     next();
 });
-
-
-
 
 mongoose.connect("mongodb://localhost:27017/augmentx");
 app.use(bodyParser.urlencoded({extended: true}));

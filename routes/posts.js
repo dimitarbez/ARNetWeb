@@ -7,6 +7,7 @@ let Comment = require("../models/comment.js");
 let User = require("../models/user.js");
 const { auth } = require("firebase");
 let middleware = require("../middleware/middleware.js");
+const e = require("express");
 
 // CONFIG
 const uploader = multer({
@@ -132,10 +133,12 @@ router.put("/posts/:id", middleware.checkPostOwnership, (req, res) => {
     Post.findByIdAndUpdate(req.params.id, req.body.post, (err, updatedBlog) => {
         if(err)
         {
+            req.flash("success", "Error while updating post!");
             res.redirect("/posts");
         }
         else
         {
+            req.flash("success", "Post successfully updated!");
             res.redirect("/posts/" + req.params.id);
         }
     });
@@ -147,10 +150,13 @@ router.delete("/posts/:id", middleware.checkPostOwnership, (req, res) => {
     Post.findByIdAndRemove(req.params.id, (err) =>{
         if(err)
         {
+            console.log(err)
+            req.flash("error", "Failed to delete post!");
             res.redirect('/posts');
         }
         else
         {
+            req.flash("success", "Post successfully deleted!");
             res.redirect('/posts');
         }
     });

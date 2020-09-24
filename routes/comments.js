@@ -79,6 +79,7 @@ router.put("/posts/:id/comments/:comment_id", middleware.checkCommentOwnership, 
         }
         else {
             console.log(updatedComment);
+            req.flash("success", "Comment successfully updated!");
             res.redirect("/posts/" + req.params.id);
         }
     })
@@ -91,6 +92,7 @@ router.delete("/posts/:id/comments/:comment_id", middleware.checkCommentOwnershi
             console.log(err);
             res.redirect("back");
         } else {
+            req.flash("success", "Comment successfully deleted!");
             res.redirect("/posts/" + req.params.id);
         }
     })
