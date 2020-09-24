@@ -45,7 +45,15 @@ app.use((req, res, next) => {
     next();
 });
 
-mongoose.connect("mongodb://localhost:27017/augmentx");
+mongoose.connect("mongodb+srv://dimo:Iy6ZtnPiNmwrIjQX@cluster0.vewcs.mongodb.net/augmentx?retryWrites=true&w=majority", {
+    useNewUrlParser: true,
+    useCreateIndex: true
+}).then(() => {
+    console.log("connected to db");
+}).catch( err => {
+    console.log(err);
+});
+//mongoose.connect("mongodb://localhost:27017/augmentx");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
