@@ -45,7 +45,7 @@ app.use((req, res, next) => {
     next();
 });
 
-mongoose.connect("mongodb+srv://dimo:Iy6ZtnPiNmwrIjQX@cluster0.vewcs.mongodb.net/augmentx?retryWrites=true&w=majority", {
+mongoose.connect(process.env.DATABASEURL, {
     useNewUrlParser: true,
     useCreateIndex: true
 }).then(() => {
@@ -53,6 +53,8 @@ mongoose.connect("mongodb+srv://dimo:Iy6ZtnPiNmwrIjQX@cluster0.vewcs.mongodb.net
 }).catch( err => {
     console.log(err);
 });
+
+//"mongodb+srv://dimo:Iy6ZtnPiNmwrIjQX@cluster0.vewcs.mongodb.net/augmentx?retryWrites=true&w=majority"
 //mongoose.connect("mongodb://localhost:27017/augmentx");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
