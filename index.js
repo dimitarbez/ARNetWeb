@@ -44,6 +44,10 @@ app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
+
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); 
+
     next();
 });
 
@@ -57,6 +61,15 @@ mongoose.connect(process.env.DATABASEURL , {
 }).catch( err => {
     console.log(err);
 });
+
+/*
+let corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+}
+
+*/
+app.use(cors());
 
 //"mongodb+srv://dimo:Iy6ZtnPiNmwrIjQX@cluster0.vewcs.mongodb.net/augmentx?retryWrites=true&w=majority"
 //mongoose.connect("mongodb://localhost:27017/augmentx");
@@ -72,6 +85,7 @@ app.use(expressSanitizer());
 app.use(commentRoutes);
 app.use(postRoutes);
 app.use(mainRoutes);
+
 
 app.get('*', (req, res) => {
     res.send('Wrong route');

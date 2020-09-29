@@ -7,7 +7,6 @@ let Comment = require("../models/comment.js");
 let User = require("../models/user.js");
 const { auth } = require("firebase");
 let middleware = require("../middleware/middleware.js");
-const e = require("express");
 
 // CONFIG
 const uploader = multer({
