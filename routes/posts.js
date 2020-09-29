@@ -7,6 +7,7 @@ let Comment = require("../models/comment.js");
 let User = require("../models/user.js");
 const { auth } = require("firebase");
 let middleware = require("../middleware/middleware.js");
+const { v4: uuidv4 } = require('uuid');
 
 // CONFIG
 const uploader = multer({
@@ -47,13 +48,21 @@ router.post("/posts", middleware.isLoggedIn, uploader.single('file_to_upload'), 
             res.status(400).send('No file uploaded');
             return;
         }
+
+        let uuidv4String = uuidv4();
+
         console.log(req.file);
-        const blob = bucket.file(req.file.originalname);
+        const blob = bucket.file('models/' + req.user._id + '/' + uuidv4String + '/' + req.file.originalname);
         const blobStream = blob.createWriteStream({
             metadata: {
-                contentType: req.file.mimetype
+                contentType: req.file.mimetype,
+                metadata: {
+                    firebaseStorageDownloadTokens: uuidv4String
+                }
             }
         });
+
+        console.log("UUID: " + uuidv4String);
 
         blobStream.on('error', err => {
             next(err);
@@ -61,17 +70,11 @@ router.post("/posts", middleware.isLoggedIn, uploader.single('file_to_upload'), 
 
         blobStream.on('finish', () => {
         
-                // Assemble the file public URL
+            // Assemble the file public URL
             const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(blob.name)}?alt=media`;
-            // Return the file name and its public URL
-            // for you to store in your own database
-            res.status(200).send({ 
-                fileName: req.file.originalname,
-                fileLocation: publicUrl
-            });
 
             console.log('finished');
-
+            res.redirect("/");
         });
 
         blobStream.end(req.file.buffer);
@@ -83,14 +86,19 @@ router.post("/posts", middleware.isLoggedIn, uploader.single('file_to_upload'), 
 
         req.body.post.description = req.sanitize(req.body.post.description);
         req.body.post.author = author;
-        Post.create(req.body.post, (err, post) =>{
+
+        let newPost = new Post(req.body.post);
+
+        newPost.uuid = uuidv4String;
+        newPost.filename = req.file.originalname;
+
+        Post.create(newPost, (err, post) =>{
             if(err)
             {
                 console.log("Error posting");
             }
             else
             {
-                res.redirect("/posts");
             }
         });
     }

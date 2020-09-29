@@ -11,6 +11,8 @@ let postSchema = new mongoose.Schema({
     title: String,
     description: String,
     created: {type: Date, default: Date.now},
+    uuid: String,
+    filename: String,
     comments: [
         {
             type: mongoose.Schema.Types.ObjectId,

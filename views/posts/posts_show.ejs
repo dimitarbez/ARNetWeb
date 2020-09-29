@@ -17,6 +17,19 @@
         </div>
         <% } %>        
     </div>
+
+    <div>
+        <model-viewer class="a"
+            src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= post.author.id %>%2F<%= post.uuid %>%2F<%= post.filename %>?alt=media&token=<%= post.uuid %>"
+            alt="A 3D model of an astronaut"
+            background-color="#FF6F59"
+            shadow-intensity="1"
+            camera-controls
+            auto-rotate
+            style="width: 1000px; height: 600px;">
+        </model-viewer>
+    </div>
+
     <div class="well">    
         <div class="text-right">
             <a class="btn btn-primary" href="/posts/<%= post._id %>/comments/new">New Comment</a>
@@ -50,18 +63,6 @@
     
         <!-- 💁 OPTIONAL: Resize Observer polyfill improves resize behavior in non-Chrome browsers -->
         <script src="https://unpkg.com/resize-observer-polyfill@1.5.0/dist/ResizeObserver.js"></script>
-
-        <div>
-            <model-viewer class="a"
-                src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/digestive_tract.glb?alt=media&token=3a6942dd-4de9-4477-a16a-332b37057346"
-                alt="A 3D model of an astronaut"
-                background-color="#FF6F59"
-                shadow-intensity="1"
-                camera-controls
-                auto-rotate
-                style="width: 1000px; height: 600px;">
-            </model-viewer>
-        </div>
 
         <script type="module"
             src="https://unpkg.com/@google/model-viewer@v0.3.1/dist/model-viewer.js">
