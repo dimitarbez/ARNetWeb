@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
@@ -45,7 +47,9 @@ app.use((req, res, next) => {
     next();
 });
 
-mongoose.connect(process.env.DATABASEURL, {
+console.log(process.env.DATABASEURL);
+
+mongoose.connect(process.env.DATABASEURL , {
     useNewUrlParser: true,
     useCreateIndex: true
 }).then(() => {
