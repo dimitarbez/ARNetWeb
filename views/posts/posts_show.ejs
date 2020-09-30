@@ -2,22 +2,25 @@
 <%- include("../partials/navbar") %>
 
 <div class="container">
-    <div class="thumbnail">
+    <div class="thumbnail mb-3">
 
-        <h1><%= post.title %></h1>
-        <h6><%= post.author.username %></h6>
-        <h6><%= post.created.toLocaleString(); %></h6>
-        <p class="caption-full"><%- post.description %></p>
+        <h1 class="display-2"><%= post.title %></h1>
+        <hr>
+        <p class="lead"><%- post.description %></p>
+        <h6 class="text-muted"><em>Created by:</em> <strong><%= post.author.username %></strong></h6>
+        <h6 class="text-muted"><%= post.created.toLocaleString(); %></h6>
         <% if(currentUser && post.author.id.equals(currentUser._id)) { %>
-        <a href="/posts/<%= post._id %>/edit">Edit</a>
-        <div>
-            <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
-                <button class="btn btn-danger">Delete</button>
-            </form>
+        <div class="row justify-content-end mr-1">
+            <a href="/posts/<%= post._id %>/edit" class="btn btn-primary">Edit</a>
+            <div class="ml-1"> 
+                <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
         </div>
         <% } %>        
     </div>
-
+    <hr>
     <div>
         <model-viewer class="a"
             src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= post.author.id %>%2F<%= post.uuid %>%2F<%= post.filename %>?alt=media&token=<%= post.uuid %>"
@@ -26,30 +29,30 @@
             shadow-intensity="1"
             camera-controls
             auto-rotate
-            style="width: 1000px; height: 600px;">
+            style="width: 100%; height: 600px;">
         </model-viewer>
     </div>
-
-    <div class="well">    
-        <div class="text-right">
+    <hr>
+    <div class="well mt-3">    
+        <div class="text-right mb-3">
             <a class="btn btn-primary" href="/posts/<%= post._id %>/comments/new">New Comment</a>
         </div>
-        <hr>
         <% post.comments.forEach( (comment) => { %>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-11 col-sm-5">
                     <strong><%= comment.author.username %></strong>
                     <p><%= comment.text %></p>
                     <span class="pull-right">10 days ago</span>
-                    <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
-                    <a class="btn btn-xs btn-warning" href="/posts/<%= post._id %>/comments/<%= comment._id %>/edit">Edit</a>
-                    <form action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-xs btn-danger" type="submit">Delete</button>
-                    </form>
-                    <% } %>
                 </div>
+                <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
+                    <div class="justify-content-end col-md-1">
+                        <a class="btn btn-xs btn-primary inline" href="/posts/<%= post._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                        <form action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" class="">
+                            <button class="btn btn-xs btn-danger inline" type="submit">Delete</button>
+                        </form>
+                    </div>
+                <% } %>
             </div>
-            <hr>
             
         <% }); %>
     </div>
