@@ -18,7 +18,7 @@ let commentRoutes = require("./routes/comments.js");
 let postRoutes = require("./routes/posts.js");
 let mainRoutes = require("./routes/main.js");
 
-//seedDB();
+seedDB();
 
 
 // PASSPORT CONFIGURATION

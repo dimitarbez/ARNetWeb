@@ -10,7 +10,7 @@ function createData(numberOfPosts)
             title: Math.random() * 10,
             description: Math.random() * 10,
             author: Math.random() * 10,
-            created: Date(Math.random())
+            created: Date(Math.random()),
         }
         data.push(post);
     }
@@ -26,9 +26,9 @@ function seedDB() {
         }
         console.log("removed posts");
     });
-/*
-    // add a feq posts
-    createData(5).forEach((item) => {
+
+    /*// add a feq posts
+    createData(20).forEach((item) => {
         Post.create(item, (err, post) =>{
             if(err){
                 console.log(err);
@@ -53,8 +53,8 @@ function seedDB() {
             }
         })
     })
-*/
-    // add a few comments
-}
 
+    // add a few comments
+    */
+}
 module.exports = seedDB;
