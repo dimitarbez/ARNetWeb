@@ -8,6 +8,7 @@ let User = require("../models/user.js");
 const { auth } = require("firebase");
 let middleware = require("../middleware/middleware.js");
 const { v4: uuidv4 } = require('uuid');
+const { BucketActionToHTTPMethod } = require("@google-cloud/storage/build/src/bucket");
 
 // CONFIG
 const uploader = multer({
@@ -154,7 +155,7 @@ router.put("/posts/:id", middleware.checkPostOwnership, (req, res) => {
 // DELETE ROUTE
 router.delete("/posts/:id", middleware.checkPostOwnership, (req, res) => {
     // Destroy block
-    Post.findByIdAndRemove(req.params.id, (err) =>{
+    Post.findByIdAndRemove(req.params.id, (err, post) =>{
         if(err)
         {
             console.log(err)
@@ -163,6 +164,13 @@ router.delete("/posts/:id", middleware.checkPostOwnership, (req, res) => {
         }
         else
         {
+            bucket.deleteFiles({
+                prefix: 'models/' + req.user._id + '/' + post.uuid + '/' + post.filename
+            }, err => {
+                if(err) {
+                    console.log("FIREBASE DELETE ERROR: " + err);
+                }
+            });
             req.flash("success", "Post successfully deleted!");
             res.redirect('/posts');
         }
