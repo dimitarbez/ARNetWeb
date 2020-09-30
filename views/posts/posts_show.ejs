@@ -38,11 +38,11 @@
             <a class="btn btn-primary" href="/posts/<%= post._id %>/comments/new">New Comment</a>
         </div>
         <% post.comments.forEach( (comment) => { %>
-            <div class="row">
+            <div class="row mb-4">
                 <div class="col-md-11 col-sm-5">
                     <strong><%= comment.author.username %></strong>
                     <p><%= comment.text %></p>
-                    <span class="pull-right">10 days ago</span>
+                    <span class="pull-right"><%= comment.created.toLocaleString(); %></span>
                 </div>
                 <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
                     <div class="justify-content-end col-md-1">
