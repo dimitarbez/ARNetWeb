@@ -69,15 +69,6 @@ router.post("/posts", middleware.isLoggedIn, uploader.single('file_to_upload'), 
             next(err);
         });
 
-        blobStream.on('finish', () => {
-        
-            // Assemble the file public URL
-            const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(blob.name)}?alt=media`;
-
-            console.log('finished');
-            res.redirect("/");
-        });
-
         blobStream.end(req.file.buffer);
 
         let author = {
@@ -93,14 +84,23 @@ router.post("/posts", middleware.isLoggedIn, uploader.single('file_to_upload'), 
         newPost.uuid = uuidv4String;
         newPost.filename = req.file.originalname;
 
-        Post.create(newPost, (err, post) =>{
-            if(err)
-            {
-                console.log("Error posting");
-            }
-            else
-            {
-            }
+        blobStream.on('finish', () => {
+        
+            // Assemble the file public URL
+            const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(blob.name)}?alt=media`;
+
+            console.log('finished');
+
+            Post.create(newPost, (err, post) =>{
+                if(err)
+                {
+                    console.log("Error posting");
+                }
+                else
+                {
+                    res.redirect("/");
+                }
+            });
         });
     }
     catch(error) {
