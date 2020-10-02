@@ -5,10 +5,10 @@ document.querySelector('.custom-file-input').addEventListener('change',function(
     var nextSibling = e.target.nextElementSibling
 
     let extensionType = fileName.split(".").pop();
-    if (extensionType != "glb") {
+    if (extensionType != "glb" && extensionType != "gltf") {
         //alert("Model must be of GLB or GLTF type!");
         document.querySelector("#file_to_upload").value = null;
-        nextSibling.innerText = "Choose a 3D model with the GLB format!";
+        nextSibling.innerText = "Choose a 3D model with the GLB or GLTF format!";
         document.querySelector("#submit").disabled = true;
     }
     else {

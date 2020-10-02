@@ -2,7 +2,12 @@
 
 <div class="container">
     <div class="row mt-4 justify-content-center mr-auto ml-auto" style="display: flex; flex-wrap: wrap;">
-        <% posts.forEach((item) => { %>
+        <% 
+        
+        posts.sort((a, b) => b.created - a.created);
+        posts.forEach((item) => { 
+            
+        %>
         <div class="col-lg-4 col-md-6 mb-5">
             <div class="card">
               <div style="">
@@ -21,6 +26,7 @@
                     <h5 class="card-title"><%= item.title %></h5>
                     <p class="card-text"><%= item.description %></p>
                     <small class="text-muted"><%= item.author.username %></small>
+                    <p class="text-muted"><small><%= item.created.toLocaleString(); %></small></p>
                     <hr />
                     <a href="/posts/<%= item._id %>" class="btn btn-primary">Open model</a>
                 </div>
