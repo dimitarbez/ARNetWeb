@@ -20,7 +20,6 @@ let mainRoutes = require("./routes/main.js");
 
 //seedDB();
 
-
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
     secret: "Zivio je drug tito megju namas!",
