@@ -12,6 +12,7 @@ let postSchema = new mongoose.Schema({
     description: String,
     created: {type: Date, default: Date.now},
     uuid: String,
+    imgPreviewName: String,
     filename: String,
     comments: [
         {

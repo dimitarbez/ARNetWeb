@@ -17,8 +17,10 @@
                     skybox-image="/images/hdrs/aristea_wreck_2k.hdr"
                     shadow-intensity="1"
                     camera-controls
-                    loading="eager"
+                    loading="lazy"
+                    reveal="auto"
                     auto-rotate
+                    poster="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= item.author.id %>%2F<%= item.uuid %>%2F<%= item.imgPreviewName %>?alt=media&token=<%= item.uuid %>"
                     style="width: 100%; height: 20em;">
                 </model-viewer>
               </div>
