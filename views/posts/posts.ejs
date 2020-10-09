@@ -11,7 +11,7 @@
         <div class="col-lg-4 col-md-6 mb-5">
             <div class="card">
               <div style="">
-                <model-viewer ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" class="a"
+                <model-viewer ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" class="a" oncontextmenu="return false;"
                     src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= item.author.id %>%2F<%= item.uuid %>%2F<%= item.filename %>?alt=media&token=<%= item.uuid %>"
                     alt="A 3D model of an astronaut"
                     skybox-image="/images/hdrs/aristea_wreck_2k.hdr"
@@ -36,5 +36,8 @@
         </div>
         <% }); %>
     </div>
+</div>
+<div style="width: 100%; text-align: center;">
+    <p class="lead">Developed By Dimitar Bezhanovski</p>
 </div>
 <%- include("../partials/footer") %>
