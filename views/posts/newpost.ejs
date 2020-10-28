@@ -1,35 +1,28 @@
-<%- include("../partials/header") %>
-<%- include("../partials/navbar") %>
+<%- include("../partials/header") %> <%- include("../partials/navbar") %>
 <div class="container">
-    <h1 class="text-center mt-4">Submit a model</h1>
-    <div class="row justify-content-center">
-      <form method="POST" enctype="multipart/form-data" action="/posts" class="col-8">
-        <div class="form-group">
-          <label for="title">Title</label>
-          <input
-            type="text"
-            class="form-control mb-2"
-            id="title"
-            aria-describedby="title"
-            name="post[title]"
-          />
-          <label for="description">Description</label>
-          <textarea name="post[description]" class="form-control" id="description" cols="30" rows="10"></textarea>
-        </div>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" name="file_to_upload" id="file_to_upload" lang="en">
-            <label class="custom-file-label" for="file_to_upload">Select 3D model</label>
-          </div>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" name="image_for_model" id="image_for_model" lang="en">
-            <label class="custom-file-label" for="image_for_model">Select image preview (to show while model loads)</label>
-          </div>
-          <hr>
-          <button type="submit" id="submit" class="btn btn-primary">Submit</button>
-      </form>
-    </div>
-  </div>
+	<h1 class="text-center mt-4">Submit a model</h1>
+	<div class="row justify-content-center">
+		<form method="POST" enctype="multipart/form-data" action="/posts" class="col-8">
+			<div class="form-group">
+				<label for="title">Title</label>
+				<input type="text" class="form-control mb-2" id="title" aria-describedby="title" name="post[title]" />
+				<label for="description">Description</label>
+				<textarea name="post[description]" class="form-control" id="description" cols="30" rows="10"></textarea>
+			</div>
+			<div class="custom-file">
+				<input type="file" class="custom-file-input" name="file_to_upload" id="file_to_upload" lang="en" />
+				<label class="custom-file-label" for="file_to_upload">Select 3D model</label>
+			</div>
+			<div class="custom-file">
+				<input type="file" class="custom-file-input" name="image_for_model" id="image_for_model" lang="en" />
+				<label class="custom-file-label" for="image_for_model">Select image preview (to show while model loads)</label>
+			</div>
+			<hr />
+			<button type="submit" id="submit" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
+</div>
 
-  <script src="/js/form.js"></script>
+<script src="/js/form.js"></script>
 
 <%- include("../partials/footer") %>

@@ -18,6 +18,7 @@ let User = require("./models/user.js");
 let commentRoutes = require("./routes/comments.js");
 let postRoutes = require("./routes/posts.js");
 let mainRoutes = require("./routes/main.js");
+let userRoutes = require("./routes/users.js");
 
 //seedDB();
 
@@ -80,6 +81,7 @@ app.use(expressSanitizer());
 app.use(commentRoutes);
 app.use(postRoutes);
 app.use(mainRoutes);
+app.use(userRoutes);
 
 
 app.get('*', (req, res) => {

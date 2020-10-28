@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="row mt-4 justify-content-center mr-auto ml-auto" style="display: flex; flex-wrap: wrap;">
+        <% 
+        
+        posts.sort((a, b) => b.created - a.created);
+        posts.forEach((item) => { 
+            
+        %>
+        <div class="col-lg-4 col-md-6 mb-5">
+            <div class="card">
+              <div style="">
+                <model-viewer ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" class="a" oncontextmenu="return false;"
+                    src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= item.author.id %>%2F<%= item.uuid %>%2F<%= item.filename %>?alt=media&token=<%= item.uuid %>"
+                    alt="A 3D model of an astronaut"
+                    skybox-image="/images/hdrs/aristea_wreck_2k.hdr"
+                    shadow-intensity="1"
+                    camera-controls
+                    loading="lazy"
+                    reveal="auto"
+                    auto-rotate
+                    poster="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= item.author.id %>%2F<%= item.uuid %>%2F<%= item.imgPreviewName %>?alt=media&token=<%= item.uuid %>"
+                    style="width: 100%; height: 20em;">
+                </model-viewer>
+              </div>
+                <div class="card-body">
+                    <h5 class="card-title"><%= item.title %></h5>
+                    <p class="card-text"><%= item.description %></p>
+                    <small class="text-muted"><a href="/users/<%= item.author.id %>"><%= item.author.username %></a></small>
+                    <p class="text-muted"><small><%= item.created.toLocaleString(); %></small></p>
+                    <hr />
+                    <a href="/posts/<%= item._id %>" class="btn btn-primary">Open model</a>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+</div>
+<div style="width: 100%; text-align: center;">
+    <p class="lead">Developed By Dimitar Bezhanovski</p>
+</div>
+<%- include("../partials/footer") %>

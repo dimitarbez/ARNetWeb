@@ -12,12 +12,18 @@ router.get("/register", (req, res) => {
 });
 // handle signup logic
 router.post("/register", (req, res) => {
-    let newUser = new User({username: req.body.username});
+    let newUser = new User({
+        username: req.body.username,
+        email: req.body.email,
+        fullname: req.body.fullname
+    });
+    console.log(newUser)
     User.register(newUser, req.body.password, (err, user) => {
         if(err) {
             req.flash("error", err.message);
             console.log(err.message);
             res.redirect("/register");
+            console.log("ERRR");
         }
         else {
             passport.authenticate("local")(req, res, () => {

@@ -21,7 +21,7 @@ document.querySelector('.custom-file-input').addEventListener('change',function(
         modelError = 0;
     }
     console.log(extensionType);
-})
+});
 
 document.querySelector('#image_for_model').addEventListener('change',function(e){
     var fileName = document.getElementById("image_for_model").files[0].name;
@@ -43,4 +43,4 @@ document.querySelector('#image_for_model').addEventListener('change',function(e)
         }
     }
     console.log(extensionType);
-})
+});

@@ -1,0 +1,32 @@
+<%- include("../partials/header") %>
+<%- include("../partials/navbar") %>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <div class="card" style="width: 100%;">
+        <img src="" class="card-img-top" alt="">
+        <div class="card-body">
+          <h5 class="card-title"><%= user.fullname %></h5>
+          <p class="card-text"><%- user.username %></p>
+          <p class="card-text"><%- user.aboutme %></p>
+          <a href="/users/<%= user._id %>/edit" class="btn btn-primary">Edit profile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-5">
+      <h6 class="text-center">Posts by <%= user.fullname %>:</h6>
+    </div>
+  </div>
+</div>
+
+
+
+<%- include("../posts/post_listings.ejs") %>
+
+<%- include("../partials/footer") %>
