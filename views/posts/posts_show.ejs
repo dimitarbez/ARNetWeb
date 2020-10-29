@@ -41,16 +41,22 @@
                 <div class="col-md-11 col-sm-5">
                     <strong><%= comment.author.username %></strong>
                     <p><%= comment.text %></p>
+                    <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
+                        <div >
+
+                            <div style="display: inline-block;">
+                                <a class="" href="/posts/<%= post._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                            </div>
+
+                            <form style="display: inline-block; color: #ff5151" action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                                <a class="" type="submit">Delete</a>
+                            </form>
+                        </div>
+
+                    <% } %>
                     <span class="pull-right"><%= comment.created.toLocaleString(); %></span>
                 </div>
-                <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
-                    <div class="justify-content-end col-md-1">
-                        <a class="btn btn-xs btn-primary inline" href="/posts/<%= post._id %>/comments/<%= comment._id %>/edit">Edit</a>
-                        <form action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" class="">
-                            <button class="btn btn-xs btn-danger inline" type="submit">Delete</button>
-                        </form>
-                    </div>
-                <% } %>
+
             </div>
             
         <% }); %>
