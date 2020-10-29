@@ -2,12 +2,8 @@ let mongoose = require("mongoose");
 
 let postSchema = new mongoose.Schema({
     author: {
-        id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
-        },
-        username: String,
-        profilePicUrl: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
     title: String,
     description: String,

@@ -12,7 +12,7 @@ middlewareObj.checkPostOwnership = function (req, res, next) {
                 res.redirect("back");
             } else {
                 // does user own campground
-                if (foundPost.author.id.equals(req.user._id)) {
+                if (foundPost.author.equals(req.user._id)) {
                     next();
                 } else {
                     req.flash("error", "This is not your post!");

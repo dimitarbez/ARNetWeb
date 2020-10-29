@@ -10,7 +10,7 @@
             <div class="card">
               <div style="">
                 <model-viewer ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" class="a" oncontextmenu="return false;"
-                    src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= item.author.id %>%2F<%= item.uuid %>%2F<%= item.filename %>?alt=media&token=<%= item.uuid %>"
+                    src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= item.author._id %>%2F<%= item.uuid %>%2F<%= item.filename %>?alt=media&token=<%= item.uuid %>"
                     alt="A 3D model of an astronaut"
                     skybox-image="/images/hdrs/aristea_wreck_2k.hdr"
                     shadow-intensity="1"
@@ -18,16 +18,16 @@
                     loading="lazy"
                     reveal="auto"
                     auto-rotate
-                    poster="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= item.author.id %>%2F<%= item.uuid %>%2F<%= item.imgPreviewName %>?alt=media&token=<%= item.uuid %>"
+                    poster="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/models%2F<%= item.author._id %>%2F<%= item.uuid %>%2F<%= item.imgPreviewName %>?alt=media&token=<%= item.uuid %>"
                     style="width: 100%; height: 20em;">
                 </model-viewer>
               </div>
                 <div class="card-body">
                     <h5 class="card-title"><%= item.title %></h5>
                     <p class="card-text"><%= item.description %></p>
-                    <a href="/users/<%= item.author.id %>">
-                        <img src="/images/user.png" width="30rem" alt="" href="">
-                        <small class="text-muted"><%= item.author.username %></small>
+                    <a href="/users/<%= item.author._id %>">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/images%2F<%= item.author._id %>%2F<%= item.author.uuid %>%2F<%= item.author.profilepic %>?alt=media&token=<%= item.author.uuid %>" width="40rem" alt="" href="">
+                        <small class=""><%= item.author.username %></small>
                     </a>
                     <p class="text-muted"><small><%= item.created.toLocaleString(); %></small></p>
                     <hr />

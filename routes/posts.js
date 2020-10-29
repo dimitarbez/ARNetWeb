@@ -30,7 +30,7 @@ const storage = new Storage({
 const bucket = storage.bucket("gs://eduar-5dcad.appspot.com");
 
 router.get("/posts", (req, res) => {
-	Post.find({}, (err, allPosts) => {
+	Post.find({}).populate("author").exec((err, allPosts) => {
 		if (err) {
 			console.log("Error getting posts");
 		} else {
@@ -59,10 +59,7 @@ router.post(
 		},
 	]),
 	async (req, res, next) => {
-		let author = {
-			id: req.user._id,
-			username: req.user.username,
-		};
+		let author = req.user._id;
 
 		let newPost = new Post(req.body.post);
 
@@ -138,6 +135,7 @@ router.get("/posts/:id", (req, res) => {
 	// post object now has the comments in it
 	Post.findById(req.params.id)
 		.populate("comments")
+		.populate("author")
 		.exec((err, foundPost) => {
 			if (err) {
 				res.redirect("/posts");
@@ -151,9 +149,14 @@ router.get("/posts/:id", (req, res) => {
 // EDIT ROUTE
 // middleware is called before route handler
 router.get("/posts/:id/edit", middleware.checkPostOwnership, (req, res) => {
+
 	Post.findById(req.params.id, (err, foundPost) => {
+		if(err) {
+			console.error(err);
+		}
 		res.render("posts/posts_edit", { post: foundPost });
 	});
+	
 });
 
 //UPDATE ROUTE

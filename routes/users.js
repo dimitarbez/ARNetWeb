@@ -35,7 +35,7 @@ router.get("/users/:id", (req, res) => {
             console.log(err);
         }
         else{
-            Post.find({ author: { id: foundUser._id, username: foundUser.username } }, (err, foundPosts) => {
+            Post.find({ author: foundUser._id }).populate("author").exec( (err, foundPosts) => {
                 if(err){
                     console.log(err);
                 }
