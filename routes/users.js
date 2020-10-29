@@ -32,7 +32,7 @@ router.get("/users/:id", (req, res) => {
 });
 
 // UPDATE ROUTE
-router.put("/users/:id", (req, res) => {
+router.put("/users/:id", middleware.isUserSelf, (req, res) => {
     req.body.user.aboutme = req.sanitize(req.body.user.aboutme);
     User.findByIdAndUpdate(req.params.id, req.body.user, (err, updatedUser) => {
         if (err) {
@@ -45,7 +45,7 @@ router.put("/users/:id", (req, res) => {
 });
 
 // EDIT ROUTE
-router.get("/users/:id/edit", (req, res) => {
+router.get("/users/:id/edit", middleware.isUserSelf, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if(err){
             console.log(err);

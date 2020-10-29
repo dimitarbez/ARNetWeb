@@ -61,4 +61,27 @@ middlewareObj.isLoggedIn = function (req, res, next) {
     res.redirect("/login");
 };
 
+middlewareObj.isUserSelf = function (req, res, next) {
+    if(req.isAuthenticated()) {
+        User.findById(req.params.id, (err, foundUser) => {
+            if(err) {
+                req.flash("error", "Comment not found!");
+                res.redirect("back");
+            } else {
+                if(foundUser._id.equals(req.user._id)) {
+                    next()
+                } else {
+                    req.flash("error", "You are not this user!");
+                    res.redirect("back");
+                }
+            }
+        });
+    }
+    else {
+        // if not, redirect user to previous page
+        req.flash("error", "You need to be logged in to do that!");
+        res.redirect("back");
+    }
+}
+
 module.exports = middlewareObj;

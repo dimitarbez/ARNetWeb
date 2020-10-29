@@ -10,7 +10,9 @@
           <h5 class="card-title"><%= user.fullname %></h5>
           <p class="card-text"><%- user.username %></p>
           <p class="card-text"><%- user.aboutme %></p>
+          <% if(user._id.equals(currentUser._id)) { %>
           <a href="/users/<%= user._id %>/edit" class="btn btn-primary">Edit profile</a>
+          <% } %>
         </div>
       </div>
     </div>
