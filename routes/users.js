@@ -11,6 +11,23 @@ const { v4: uuidv4 } = require("uuid");
 const { BucketActionToHTTPMethod } = require("@google-cloud/storage/build/src/bucket");
 const { model } = require("../models/comment.js");
 
+// CONFIG
+const uploader = multer({
+	storage: multer.memoryStorage(),
+    limits: {
+        // file size limit in MB
+        fileSize: 5 * 1024 * 1024
+    }
+});
+
+const storage = new Storage({
+	projectId: "eduar-5dcad",
+	keyFilename: "api/services/key.json",
+});
+
+const bucket = storage.bucket("gs://eduar-5dcad.appspot.com");
+
+
 // GET ROUTE
 router.get("/users/:id", (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
@@ -32,16 +49,75 @@ router.get("/users/:id", (req, res) => {
 });
 
 // UPDATE ROUTE
-router.put("/users/:id", middleware.isUserSelf, (req, res) => {
-    req.body.user.aboutme = req.sanitize(req.body.user.aboutme);
-    User.findByIdAndUpdate(req.params.id, req.body.user, (err, updatedUser) => {
-        if (err) {
-			req.flash("success", "Error while updating user!");
-		} else {
-			req.flash("success", "User successfully updated!");
+router.put("/users/:id", middleware.isUserSelf, uploader.single("profile_picture"), 
+async (req, res, next) => {
+    console.log("arrived");
+    try {
+        if(!req.file) {
+            
+            req.body.user.aboutme = req.sanitize(req.body.user.aboutme);
+            User.findByIdAndUpdate(req.params.id, req.body.user, (err, updatedUser) => {
+                if (err) {
+                    req.flash("success", "Error while updating user!");
+                } else {
+                    req.flash("success", "User successfully updated!");
+                }
+                res.redirect("/users/" + req.params.id);
+            });
+
+            return;
         }
-        res.redirect("/users/" + req.params.id);
-    });
+
+        console.log(req.file);
+
+        let uuidv4String = uuidv4();
+
+        let pictureLocation = "images/" + req.user._id + "/" + uuidv4String + "/";
+        const blob = bucket.file(pictureLocation + req.file.originalname);
+        const blobStream = blob.createWriteStream({
+            metadata: {
+                contentType: req.file.mimetype,
+                metadata: {
+                    firebaseStorageDownloadTokens: uuidv4String,
+                },
+            }
+        });
+
+        blobStream.on("error", (err) => {
+            next(err);
+        });
+
+        blobStream.end(req.file.buffer);
+        blobStream.on("finish", () => { 
+            console.log("model upload finished");
+            
+            let updatedUser = {
+                profilepic: req.file.originalname,
+                fullname: req.body.user.fullname,
+                email: req.body.user.email,
+                aboutme: req.sanitize(req.body.user.aboutme),
+                uuid: uuidv4String
+            };
+            
+            console.log(updatedUser);
+
+            User.findByIdAndUpdate(req.user._id, { $set: updatedUser }, (err, post) => {
+                if (err) {
+                    console.log(err);
+                    req.flash("error", "Error while updating user!");
+                } else {
+                    req.flash("success", "User successfully updated!");
+                }
+                res.redirect("/users/" + req.user._id);
+            });
+        });
+
+    }
+    catch (error) {
+        console.log(err);
+        req.flash("success", "Error while updating user!");
+        res.redirect("/users/" + req.user._id);
+    }
 });
 
 // EDIT ROUTE

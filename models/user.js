@@ -4,10 +4,11 @@ let passportLocalMongoose = require("passport-local-mongoose");
 let userSchema = mongoose.Schema({
     username: String,
     password: String,
-    profilePicUrl: String,
+    profilepic: String,
     fullname: String,
     email: String,
-    aboutme: String
+    aboutme: String,
+    uuid: String
 });
 
 // adds passport methods to user
