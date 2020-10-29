@@ -1,12 +1,13 @@
 <%- include("../partials/header") %> 
 <%- include("../partials/navbar") %>
 <div class="container">
-  <h5 class="text-center mt-5 mb-3">Submit a comment to <%= post.title %></h5>
+  <h5 class="text-center mt-5 mb-3">Post comment</h5>
   <div class="row">
     <form
       method="POST"
       action="/posts/<%= post._id %>/comments"
       style="margin: 0 auto"
+      class="col-md-8 col-10"
     >
       <div class="form-group">
         <label for="text">Text:</label>
