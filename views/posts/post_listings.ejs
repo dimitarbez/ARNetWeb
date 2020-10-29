@@ -25,7 +25,10 @@
                 <div class="card-body">
                     <h5 class="card-title"><%= item.title %></h5>
                     <p class="card-text"><%= item.description %></p>
-                    <small class="text-muted"><a href="/users/<%= item.author.id %>"><%= item.author.username %></a></small>
+                    <a href="/users/<%= item.author.id %>">
+                        <img src="/images/user.png" width="30rem" alt="" href="">
+                        <small class="text-muted"><%= item.author.username %></small>
+                    </a>
                     <p class="text-muted"><small><%= item.created.toLocaleString(); %></small></p>
                     <hr />
                     <a href="/posts/<%= item._id %>" class="btn btn-primary">Open model</a>
