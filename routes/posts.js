@@ -125,15 +125,19 @@ router.post(
 			blobStream.end(req.files["file_to_upload"][0].buffer);
 
 			blobStream.on("finish", () => { 
-                Post.create(newPost, (err, post) => {
-                    if (err) {
-						console.log(err);
-						res.redirect("back");
-                    } else {
-                        res.redirect("/");
-                    }
-                });
-            });
+
+			});
+			
+			Post.create(newPost, (err, post) => {
+				if (err) {
+					console.log(err);
+					res.redirect("back");
+				} else {
+					req.flash("primary", "Model is being uploaded in the background!");
+					res.redirect("/");
+				}
+			});
+
 		} catch (error) {
 			res.status(200).send(`Error, could not upload file: ${error}`);
 			return;
