@@ -77,7 +77,6 @@ app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 // express sanitizer must be after body parser
 app.use(expressSanitizer());
-app.use(middleware.extendTimeoutMiddleware);
 
 // use route files
 app.use(commentRoutes);
