@@ -57,6 +57,7 @@ router.get("/posts/new", middleware.isLoggedIn, (req, res) => {
 router.post(
 	"/posts",
 	middleware.isLoggedIn,
+	middleware.extendTimeoutMiddleware,
 	uploader.fields([
 		{
 			name: "file_to_upload",

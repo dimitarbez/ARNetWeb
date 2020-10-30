@@ -134,6 +134,6 @@ middlewareObj.extendTimeoutMiddleware = (req, res, next) => {
   
     waitAndSend();
     next();
-  };
+};
 
 module.exports = middlewareObj;
