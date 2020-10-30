@@ -68,8 +68,10 @@ router.post(
 		},
 	]),
 	async (req, res, next) => {
-		let author = req.user._id;
+		// set timeout to 10 mins
+		req.socket.setTimeout(10 * 60 * 1000);
 
+		let author = req.user._id;
 		let newPost = new Post(req.body.post);
 
 		try {
