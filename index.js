@@ -88,6 +88,11 @@ app.get('*', (req, res) => {
     res.send('Wrong route');
 });
 
-app.listen(process.env.PORT || 3000, function() {
+let server = app.listen(process.env.PORT || 3000, function() {
     console.log('app started on port 3000');
+});
+
+server.on('connection', (socket) => {
+    // 10 min timeout
+    socket.setTimeout(10 * 60 * 1000);
 });
