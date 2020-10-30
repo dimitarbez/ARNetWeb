@@ -28,13 +28,24 @@ const storage = new Storage({
 const bucket = storage.bucket("gs://eduar-5dcad.appspot.com");
 
 router.get("/posts", (req, res) => {
-	Post.find({}).populate("author").exec((err, allPosts) => {
-		if (err) {
-			console.log("Error getting posts");
-		} else {
-			res.render("posts/posts.ejs", { posts: allPosts });
-		}
-	});
+	if(req.query.search) {
+		const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+		Post.find({title: regex}).populate("author").exec((err, allPosts) => {
+			if (err) {
+				console.log("Error getting posts");
+			} else {
+				res.render("posts/posts.ejs", { posts: allPosts, navSearchDestination: "/posts" });
+			}
+		});
+	} else {
+		Post.find({}).populate("author").exec((err, allPosts) => {
+			if (err) {
+				console.log("Error getting posts");
+			} else {
+				res.render("posts/posts.ejs", { posts: allPosts, navSearchDestination: "/posts" });
+			}
+		});
+	}
 });
 
 // show post creation form
@@ -145,7 +156,7 @@ router.get("/posts/:id", (req, res) => {
 				console.log(err);
 				res.redirect("back");
 			} else {
-				res.render("posts/posts_show", { post: foundPost });
+				res.render("posts/posts_show", { post: foundPost, navSearchDestination: "/posts" });
 			}
 		});
 });
@@ -159,7 +170,7 @@ router.get("/posts/:id/edit", middleware.checkPostOwnership, (req, res) => {
 			console.error(err);
 		}
 		else {
-			res.render("posts/posts_edit", { post: foundPost });
+			res.render("posts/posts_edit", { post: foundPost, navSearchDestination: "/posts" });
 		}
 	});
 });
@@ -204,5 +215,9 @@ router.delete("/posts/:id", middleware.checkPostOwnership, (req, res) => {
 	});
 	// Redirect somewhere
 });
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;

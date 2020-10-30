@@ -27,8 +27,33 @@ const storage = new Storage({
 
 const bucket = storage.bucket("gs://eduar-5dcad.appspot.com");
 
-
 // GET ROUTE
+router.get("/users", (req, res) => {
+	if(req.query.search) {
+		const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+		User.find({$or: [
+            {username: regex},
+            {fullname: regex},
+            {email: regex},
+        ]}, (err, foundUsers) => {
+			if (err) {
+				console.log(err);
+			} else {
+				res.render("users/users.ejs", { users: foundUsers, navSearchDestination: "/users" });
+			}
+		});
+	} else {
+		User.find({}, (err, allUsers) => {
+			if (err) {
+				console.log(err);
+			} else {
+				res.render("users/users.ejs", { users: allUsers, navSearchDestination: "/users" });
+			}
+		});
+	}
+});
+
+// SHOW ROUTE
 router.get("/users/:id", (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if(err){
@@ -40,7 +65,7 @@ router.get("/users/:id", (req, res) => {
                     console.log(err);
                 }
                 else{
-                    res.render("users/users_show.ejs", {user: foundUser, posts: foundPosts});
+                    res.render("users/users_show.ejs", {user: foundUser, posts: foundPosts, navSearchDestination: "/users"});
                 }
             });
         }
@@ -125,9 +150,13 @@ router.get("/users/:id/edit", middleware.isUserSelf, (req, res) => {
             console.log(err);
         }
         else{
-            res.render("users/users_edit.ejs", {user: foundUser});
+            res.render("users/users_edit.ejs", {user: foundUser, navSearchDestination: "/users"});
         }
     });
 });
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;
