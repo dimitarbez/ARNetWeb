@@ -2,25 +2,25 @@
 <%- include("../partials/navbar") %>
 
 <div class="container">
-    <div class="row mt-4 justify-content-center mr-auto ml-auto" style="display: flex; flex-wrap: wrap;">
         <% 
         
         users.forEach((user) => { 
             
         %>
-        <div class="col-lg-4 col-md-6 mb-5">
-            <div class="card">
-                <img class="card-img-top" src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/images%2F<%= user._id %>%2F<%= user.uuid %>%2F<%= user.profilepic %>?alt=media&token=<%= user.uuid %>" alt="">
-                <div class="card-body">
-                    <h5 class="card-title"><%= user.fullname %></h5>
-                    <p class="card-text"><%= user.aboutme %></p>
-                    <hr />
-                    <a href="/users/<%= user._id %>" class="btn btn-primary">Go to profile</a>
+        <div class="row mt-4 justify-content-center mr-auto ml-auto">
+            <div class="col-md-6 mb-5 inline-block">
+                <div class="card">
+                    <img class="card-img-top" src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/images%2F<%= user._id %>%2F<%= user.uuid %>%2F<%= user.profilepic %>?alt=media&token=<%= user.uuid %>" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= user.fullname %></h5>
+                        <p class="card-text"><%- user.aboutme %></p>
+                        <hr />
+                        <a href="/users/<%= user._id %>" class="btn btn-primary">Go to profile</a>
+                    </div>
                 </div>
             </div>
         </div>
         <% }); %>
-    </div>
 </div>
 <div style="width: 100%; text-align: center;">
     <p class="lead">Developed By Dimitar Bezhanovski</p>

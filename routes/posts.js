@@ -156,7 +156,7 @@ router.get("/posts/:id", (req, res) => {
 				console.log(err);
 				res.redirect("back");
 			} else {
-				res.render("posts/posts_show", { post: foundPost, navSearchDestination: "/posts" });
+				res.render("posts/posts_show", { post: foundPost });
 			}
 		});
 });
@@ -170,7 +170,7 @@ router.get("/posts/:id/edit", middleware.checkPostOwnership, (req, res) => {
 			console.error(err);
 		}
 		else {
-			res.render("posts/posts_edit", { post: foundPost, navSearchDestination: "/posts" });
+			res.render("posts/posts_edit", { post: foundPost });
 		}
 	});
 });

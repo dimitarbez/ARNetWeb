@@ -16,9 +16,11 @@
           <a class="nav-link" href="/posts/new">Upload model</a>
         </li>
       </ul>
+      <% if(typeof navSearchDestination != 'undefined' ) { %>
       <form class="form-inline my-2 my-lg-0" action="<%= navSearchDestination %>" method="GET">
         <input id="searchbar_main" class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
       </form>
+      <% } %>
       <form class="form-inline my-2 my-lg-0">
         <% if(!currentUser) { %>
           <a class="btn btn-outline-light my-2 mr-1 my-sm-0" href="/login">Login</a>

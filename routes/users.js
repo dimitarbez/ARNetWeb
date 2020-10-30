@@ -65,7 +65,7 @@ router.get("/users/:id", (req, res) => {
                     console.log(err);
                 }
                 else{
-                    res.render("users/users_show.ejs", {user: foundUser, posts: foundPosts, navSearchDestination: "/users"});
+                    res.render("users/users_show.ejs", {user: foundUser, posts: foundPosts});
                 }
             });
         }
@@ -150,7 +150,7 @@ router.get("/users/:id/edit", middleware.isUserSelf, (req, res) => {
             console.log(err);
         }
         else{
-            res.render("users/users_edit.ejs", {user: foundUser, navSearchDestination: "/users"});
+            res.render("users/users_edit.ejs", {user: foundUser});
         }
     });
 });

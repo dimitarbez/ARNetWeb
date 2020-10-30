@@ -24,7 +24,7 @@
               </div>
                 <div class="card-body">
                     <h5 class="card-title"><%= item.title %></h5>
-                    <p class="card-text"><%= item.description %></p>
+                    <p class="card-text"><%- item.description %></p>
                     <a href="/users/<%= item.author._id %>">
                         <img src="https://firebasestorage.googleapis.com/v0/b/eduar-5dcad.appspot.com/o/images%2F<%= item.author._id %>%2F<%= item.author.uuid %>%2F<%= item.author.profilepic %>?alt=media&token=<%= item.author.uuid %>" width="40rem" alt="" href="">
                         <small class=""><%= item.author.username %></small>
