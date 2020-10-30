@@ -16,7 +16,8 @@ router.get("/posts/:id/comments/new", middleware.isLoggedIn, (req, res) => {
     // find post by id
     Post.findById(req.params.id, (err, post) => {
         if(err) {
-            console.log("can't find post");
+            console.log(err);
+            res.redirect("back");
         }
         else
         {
@@ -31,7 +32,7 @@ router.post("/posts/:id/comments", middleware.isLoggedIn, (req, res) => {
     Post.findById(req.params.id, (err, post) => {
         if(err) {
             console.log(err);
-            res.redirect("/posts");
+            res.redirect("back");
         }
         else {
             Comment.create(req.body.comment, (err, comment) => {
@@ -40,8 +41,7 @@ router.post("/posts/:id/comments", middleware.isLoggedIn, (req, res) => {
                 } else {
                     //console.log(comment);
                     // add username and id to comment
-                    comment.author.id = req.user._id;
-                    comment.author.username = req.user.username
+                    comment.author = req.user._id;
                     // save comment
                     comment.save();
                     post.comments.push(comment);

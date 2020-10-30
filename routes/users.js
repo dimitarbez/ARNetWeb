@@ -40,7 +40,6 @@ router.get("/users/:id", (req, res) => {
                     console.log(err);
                 }
                 else{
-                    console.log(foundPosts);
                     res.render("users/users_show.ejs", {user: foundUser, posts: foundPosts});
                 }
             });
@@ -58,6 +57,7 @@ async (req, res, next) => {
             req.body.user.aboutme = req.sanitize(req.body.user.aboutme);
             User.findByIdAndUpdate(req.params.id, req.body.user, (err, updatedUser) => {
                 if (err) {
+                    console.log(err);
                     req.flash("success", "Error while updating user!");
                 } else {
                     req.flash("success", "User successfully updated!");
@@ -67,8 +67,6 @@ async (req, res, next) => {
 
             return;
         }
-
-        console.log(req.file);
 
         let uuidv4String = uuidv4();
 

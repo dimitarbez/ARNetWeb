@@ -14,12 +14,10 @@ const { model } = require("../models/comment.js");
 // CONFIG
 const uploader = multer({
 	storage: multer.memoryStorage(),
-	/*
     limits: {
         // file size limit in MB
         fileSize: 50 * 1024 * 1024
     }
-    */
 });
 
 const storage = new Storage({
@@ -66,7 +64,6 @@ router.post(
 		try {
 			if (!req.files) {
 				res.status(400).send("No file uploaded");
-				console.log(req.files);
 				return;
 			}
 
@@ -110,16 +107,16 @@ router.post(
 			blobImageStream.end(req.files["image_for_model"][0].buffer);
 
 			blobStream.on("finish", () => { 
-                console.log("model upload finished"); 
                 Post.create(newPost, (err, post) => {
                     if (err) {
-                        console.log("Error posting");
+						console.log(err);
+						res.redirect("back");
                     } else {
                         res.redirect("/");
                     }
                 });
             });
-			blobImageStream.on("finish", () => { console.log("image upload finished"); });
+			blobImageStream.on("finish", () => {});
 		} catch (error) {
 			res.status(200).send(`Error, could not upload file: ${error}`);
 			return;
@@ -135,12 +132,19 @@ router.get("/posts/:id", (req, res) => {
 	// post object now has the comments in it
 	Post.findById(req.params.id)
 		.populate("comments")
+		.populate({
+			path: "comments",
+			populate: {
+				path: "author"
+			}
+		})
 		.populate("author")
 		.exec((err, foundPost) => {
+			console.log(foundPost);
 			if (err) {
-				res.redirect("/posts");
+				console.log(err);
+				res.redirect("back");
 			} else {
-				console.log(foundPost);
 				res.render("posts/posts_show", { post: foundPost });
 			}
 		});
@@ -154,9 +158,10 @@ router.get("/posts/:id/edit", middleware.checkPostOwnership, (req, res) => {
 		if(err) {
 			console.error(err);
 		}
-		res.render("posts/posts_edit", { post: foundPost });
+		else {
+			res.render("posts/posts_edit", { post: foundPost });
+		}
 	});
-	
 });
 
 //UPDATE ROUTE
@@ -165,7 +170,8 @@ router.put("/posts/:id", middleware.checkPostOwnership, (req, res) => {
 	Post.findByIdAndUpdate(req.params.id, req.body.post, (err, updatedBlog) => {
 		if (err) {
 			req.flash("success", "Error while updating post!");
-			res.redirect("/posts");
+			console.log(err);
+			res.redirect("back");
 		} else {
 			req.flash("success", "Post successfully updated!");
 			res.redirect("/posts/" + req.params.id);
@@ -180,7 +186,7 @@ router.delete("/posts/:id", middleware.checkPostOwnership, (req, res) => {
 		if (err) {
 			console.log(err);
 			req.flash("error", "Failed to delete post!");
-			res.redirect("/posts");
+			res.redirect("back");
 		} else {
 			bucket.deleteFiles(
 				{
