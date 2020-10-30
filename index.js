@@ -9,6 +9,7 @@ let expressSanitizer = require('express-sanitizer');
 let seedDB = require("./seeds.js");
 let passport = require("passport");
 let LocalStrategy = require("passport-local");
+let middleware = require("./middleware/middleware.js");
 // flash is for using html notifications for users when they do login or logout or other tasks
 let flash = require("connect-flash");
 let Post = require("./models/post.js");
@@ -76,6 +77,7 @@ app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 // express sanitizer must be after body parser
 app.use(expressSanitizer());
+app.use(middleware.extendTimeoutMiddleware);
 
 // use route files
 app.use(commentRoutes);
