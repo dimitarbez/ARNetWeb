@@ -73,33 +73,41 @@ router.post(
 		let newPost = new Post(req.body.post);
 
 		try {
-			if (!req.files) {
-				res.status(400).send("No file uploaded");
-				return;
+			let uuidv4String = uuidv4();
+			let modelLocation = "models/" + req.user._id + "/" + uuidv4String + "/";
+
+			if (req.files["image_for_model"]) {
+				newPost.imgPreviewName = req.files["image_for_model"][0].originalname;
+				const blobImage = bucket.file(modelLocation + req.files["image_for_model"][0].originalname);
+
+				const blobImageStream = blobImage.createWriteStream({
+					metadata: {
+						contentType: req.files["image_for_model"][0].mimetype,
+						metadata: {
+							firebaseStorageDownloadTokens: uuidv4String,
+						},
+					},
+				});
+
+				blobImageStream.on("error", (err) => {
+					next(err);
+				});
+
+				blobImageStream.end(req.files["image_for_model"][0].buffer);
+
+				blobImageStream.on("finish", () => {});
 			}
 
-			let uuidv4String = uuidv4();
 			newPost.description = req.sanitize(req.body.post.description);
 			newPost.author = author;
 			newPost.uuid = uuidv4String;
 			newPost.filename = req.files["file_to_upload"][0].originalname;
-			newPost.imgPreviewName = req.files["image_for_model"][0].originalname;
 
-			let modelLocation = "models/" + req.user._id + "/" + uuidv4String + "/";
 			const blob = bucket.file(modelLocation + req.files["file_to_upload"][0].originalname);
-			const blobImage = bucket.file(modelLocation + req.files["image_for_model"][0].originalname);
+
 			const blobStream = blob.createWriteStream({
 				metadata: {
 					contentType: req.files["file_to_upload"][0].mimetype,
-					metadata: {
-						firebaseStorageDownloadTokens: uuidv4String,
-					},
-				},
-			});
-
-			const blobImageStream = blobImage.createWriteStream({
-				metadata: {
-					contentType: req.files["image_for_model"][0].mimetype,
 					metadata: {
 						firebaseStorageDownloadTokens: uuidv4String,
 					},
@@ -110,12 +118,9 @@ router.post(
 				next(err);
 			});
 
-			blobImageStream.on("error", (err) => {
-				next(err);
-			});
+
 
 			blobStream.end(req.files["file_to_upload"][0].buffer);
-			blobImageStream.end(req.files["image_for_model"][0].buffer);
 
 			blobStream.on("finish", () => { 
                 Post.create(newPost, (err, post) => {
@@ -127,7 +132,6 @@ router.post(
                     }
                 });
             });
-			blobImageStream.on("finish", () => {});
 		} catch (error) {
 			res.status(200).send(`Error, could not upload file: ${error}`);
 			return;
