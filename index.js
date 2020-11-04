@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 let express = require('express');
+var http = require('http');
+var enforce = require('express-sslify');
 let app = express();
 let bodyParser = require('body-parser');
 let mongoose = require('mongoose');
@@ -78,6 +80,8 @@ app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 // express sanitizer must be after body parser
 app.use(expressSanitizer());
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
+
 
 // use route files
 app.use(commentRoutes);
@@ -90,6 +94,6 @@ app.get('*', (req, res) => {
     res.send('Wrong route');
 });
 
-app.listen(process.env.PORT || 3000, function() {
+http.createServer(app).listen(process.env.PORT || 3000, function() {
     console.log('app started on port 3000');
 });
