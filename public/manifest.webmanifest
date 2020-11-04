@@ -1,0 +1,15 @@
+{
+    "background_color": "white",
+    "description": "AugmentX",
+    "display": "fullscreen",
+    "icons": [
+      {
+        "src": "images/AugmentXLogoBlackBackground.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ],
+    "name": "AugmentX",
+    "short_name": "AugmentX",
+    "start_url": "/"
+  }
