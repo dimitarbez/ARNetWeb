@@ -1,7 +1,7 @@
 {
     "background_color": "white",
     "description": "AugmentX",
-    "display": "fullscreen",
+    "display": "standalone",
     "icons": [
       {
         "src": "images/AugmentXLogoBlackBackground.png",
