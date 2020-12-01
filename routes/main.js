@@ -57,7 +57,7 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-    res.redirect("/posts");
+    res.render("landing.ejs");;
 });
 
 module.exports = router;

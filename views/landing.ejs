@@ -1,0 +1,35 @@
+<%- include("partials/header") %>
+<%- include("partials/navbar") %>
+<style>
+    body {
+        background-image: url("/images/background_landing.jpg");
+    }
+    .jumbotron {
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+        color: white;
+        font-weight: bold;
+        border: 3px solid #f1f1f1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        width: 80%;
+        padding: 20px;
+        text-align: center;
+      }
+</style>
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to AugmentX! The 3D and AR visualization platform for archeologists and museums</h1>
+        <p class="lead"></p>
+        <hr class="my-4">
+        <p>We .</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="/posts" role="button">Enter</a>
+        </p>
+    </div>
+</div>
+
+<%- include("partials/footer") %>
