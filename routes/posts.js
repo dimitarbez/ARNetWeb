@@ -131,7 +131,7 @@ router.post(
 						console.log(err);
 						res.redirect("back");
 					} else {
-						req.flash("primary", "Model is being uploaded in the background!");
+						//req.flash("primary", "Model is being uploaded in the background!");
 						res.redirect("/");
 					}
 				});
