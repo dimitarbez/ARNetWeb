@@ -132,7 +132,7 @@ router.post(
 						res.redirect("back");
 					} else {
 						//req.flash("primary", "Model is being uploaded in the background!");
-						res.redirect("/");
+						res.redirect("/posts/" + post._id);
 					}
 				});
 			});
