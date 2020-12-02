@@ -94,7 +94,7 @@ app.get('*', (req, res) => {
 });
 
 app.use(enforce.HTTPS({ trustProtoHeader: true }));
-
+//
 http.createServer(app).listen(process.env.PORT || 3000, function() {
     console.log('app started on port 3000');
 });
