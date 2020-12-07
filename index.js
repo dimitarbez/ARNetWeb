@@ -80,7 +80,7 @@ app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 // express sanitizer must be after body parser
 app.use(expressSanitizer());
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+//app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 
 // use route files
@@ -94,6 +94,7 @@ app.get('*', (req, res) => {
     res.send('Wrong route');
 });
 
-http.createServer(app).listen(process.env.PORT || 3000, function() {
+//http.createServer
+(app).listen(process.env.PORT || 3000, function() {
     console.log('app started on port 3000');
 });
